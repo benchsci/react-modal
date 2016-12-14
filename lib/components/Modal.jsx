@@ -35,7 +35,8 @@ var Modal = React.createClass({
     onRequestClose: React.PropTypes.func,
     closeTimeoutMS: React.PropTypes.number,
     ariaHideApp: React.PropTypes.bool,
-    shouldCloseOnOverlayClick: React.PropTypes.bool
+    shouldCloseOnOverlayClick: React.PropTypes.bool,
+    name: React.PropTypes.string
   },
 
   getDefaultProps: function () {
@@ -43,7 +44,8 @@ var Modal = React.createClass({
       isOpen: false,
       ariaHideApp: true,
       closeTimeoutMS: 0,
-      shouldCloseOnOverlayClick: true
+      shouldCloseOnOverlayClick: true,
+      name: ''
     };
   },
 
@@ -55,27 +57,34 @@ var Modal = React.createClass({
   },
 
   componentWillReceiveProps: function(newProps) {
-    this.renderPortal(newProps);
+      if (newProps.isOpen && !this.props.isOpen) {
+          document.body.removeChild(this.node)
+          document.body.appendChild(this.node)
+      }
+      this.renderPortal(newProps);
   },
 
   componentWillUnmount: function() {
     ReactDOM.unmountComponentAtNode(this.node);
     document.body.removeChild(this.node);
-    elementClass(document.body).remove('ReactModal__Body--open');
+    elementClass(document.body).remove('ReactModal__Body--open'+this.props.name);
   },
 
   renderPortal: function(props) {
     if (props.isOpen) {
-      elementClass(document.body).add('ReactModal__Body--open');
+      elementClass(document.body).add('ReactModal__Body--open'+this.props.name);
+      // document.body.appendChild(this.node)
+
     } else {
-      elementClass(document.body).remove('ReactModal__Body--open');
+      elementClass(document.body).remove('ReactModal__Body--open'+this.props.name);
+      // document.body.removeChild(this.node)
     }
 
     if (props.ariaHideApp) {
       ariaAppHider.toggle(props.isOpen, props.appElement);
     }
 
-    this.portal = renderSubtreeIntoContainer(this, ModalPortal(Assign({}, props, {defaultStyles: Modal.defaultStyles})), this.node);
+    this.portal = renderSubtreeIntoContainer(this, ModalPortal(Assign({}, props, {defaultStyles: Modal.defaultStyles, name: this.props.name })), this.node);
   },
 
   render: function () {
