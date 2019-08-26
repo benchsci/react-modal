@@ -1,5 +1,7 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
+var PropTypes = require('prop-types');
+var CreateReactClass = require('create-react-class');
 var ExecutionEnvironment = require('exenv');
 var ModalPortal = React.createFactory(require('./ModalPortal'));
 var ariaAppHider = require('../helpers/ariaAppHider');
@@ -10,7 +12,7 @@ var Assign = require('lodash.assign');
 var SafeHTMLElement = ExecutionEnvironment.canUseDOM ? window.HTMLElement : {};
 var AppElement = ExecutionEnvironment.canUseDOM ? document.body : {appendChild: function() {}};
 
-var Modal = React.createClass({
+var Modal = CreateReactClass({
 
   displayName: 'Modal',
   statics: {
@@ -25,18 +27,18 @@ var Modal = React.createClass({
   },
 
   propTypes: {
-    isOpen: React.PropTypes.bool.isRequired,
-    style: React.PropTypes.shape({
-      content: React.PropTypes.object,
-      overlay: React.PropTypes.object
+    isOpen: PropTypes.bool.isRequired,
+    style: PropTypes.shape({
+      content: PropTypes.object,
+      overlay: PropTypes.object
     }),
-    appElement: React.PropTypes.instanceOf(SafeHTMLElement),
-    onAfterOpen: React.PropTypes.func,
-    onRequestClose: React.PropTypes.func,
-    closeTimeoutMS: React.PropTypes.number,
-    ariaHideApp: React.PropTypes.bool,
-    shouldCloseOnOverlayClick: React.PropTypes.bool,
-    name: React.PropTypes.string
+    appElement: PropTypes.instanceOf(SafeHTMLElement),
+    onAfterOpen: PropTypes.func,
+    onRequestClose: PropTypes.func,
+    closeTimeoutMS: PropTypes.number,
+    ariaHideApp: PropTypes.bool,
+    shouldCloseOnOverlayClick: PropTypes.bool,
+    name: PropTypes.string
   },
 
   getDefaultProps: function () {
